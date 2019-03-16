@@ -12,18 +12,23 @@ def external_refs():
     (this_year, this_pos) = year_and_position(file)
     content = file_content(file)
     year = this_year
-    for token in regex.findall(r'(Dz\.U\.)|((?<=poz\.\s*)\d+)|(\d{4}(?=\s*r\.))|(załączniku)', content, regex.MULTILINE):
-        (dz_u_token, pos_token, year_token, attachment_token) = token
+    issue_no = 0
+    for token in regex.findall(r'(Dz\.\s*U\.)|((?<=poz\.\s*)\d+)|(\d{4}(?=\s*r\.))|(załączniku)|((?<=Nr\s*)\d+)', content, regex.MULTILINE):
+        (dz_u_token, pos_token, year_token, attachment_token, number_token) = token
         if dz_u_token != '':
             waiting_for_dz_u = False
         elif pos_token != '':
             pos = int(pos_token)
             if (year, pos) != (this_year, this_pos) and not waiting_for_dz_u:  # ignore the file signature and references in attachments; ignore references to attachments
-                collection.append((year, pos))
+                collection.append((year, pos, issue_no))
+                issue_no = 0
         elif year_token != '':
             year = int(year_token)
-        else:
+        elif attachment_token != '':
             waiting_for_dz_u = True
+        else:
+            issue_no = int(number_token)
+
     print(collection)
 
 
