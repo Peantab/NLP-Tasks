@@ -44,12 +44,14 @@ def external_refs():
 def internal_refs():
     """ Task 2 """
     collection = []
-    for file in ["ustawy/2004_2784.txt"]:
+    for file in generate_paths():
         collection_in_file = []
         (year, pos) = year_and_position(file)
         content = file_content(file)
+        content = ignore_quotations_and_names(content)
+        content = skip_changelogs(content)
         article = 0
-        for token in regex.findall(r'((?<=art\.\s*)\d+)|((?<=ust\.\s*)\d+)', content, regex.MULTILINE + regex.IGNORECASE):
+        for token in regex.findall(r'((?<=art\.\s*)\d+(?!\.))|((?<=ust\.\s*)\d+\b(?!(?:\s+ustawy\s+zmienianej)|(?:\s+pkt\s+\d\s+ustawy\s+zmienianej)))', content, regex.MULTILINE + regex.IGNORECASE):
             (art_token, paragraph_token) = token
             if art_token != '':
                 article = int(art_token)
@@ -96,6 +98,8 @@ def year_and_position(path):
 def pseudo_functional_stuff(collection):
     """ It's groupBy, reduce and map, apparently the Python-way... :( """
     output = []
+    if len(collection) == 0:
+        return output
     last_year = collection[0][0]
     last_pos = collection[0][1]
     last_issue = 0
@@ -108,6 +112,7 @@ def pseudo_functional_stuff(collection):
         last_pos = pos
         last_issue = issue_no
         counter += 1
+    output.append((last_year, last_pos, last_issue, counter))
     return output
 
 
@@ -117,9 +122,23 @@ def csv_task_one(collection):
         print("{},{},{},{}".format(record[0], record[1], record[2], record[3]))
 
 
+def ignore_quotations_and_names(text):
+    """ If it's a quotation, it surely doesn't have references to quoting document """
+    return regex.sub(r"[\"„].*?[\"”]", "", text, flags=regex.MULTILINE+regex.DOTALL)
+
+
+def skip_changelogs(text):
+    split = regex.split(r"(?=\bArt\.).", text)
+    split = list(filter(lambda article: regex.search(r"wprowadza\s+się\s+następujące\s+zmiany:", article, flags=regex.MULTILINE) is None, split))
+    result = "A".join(split)
+    return result
+
+
 def count_duplicates(collection):
     output = []
     counter = 0
+    if len(collection) == 0:
+        return output
     last_entry = collection[0]
     for entry in collection:
         if entry != last_entry:
@@ -127,6 +146,7 @@ def count_duplicates(collection):
             counter = 0
         last_entry = entry
         counter += 1
+    output.append((last_entry[0], last_entry[1], counter))
     return output
 
 
