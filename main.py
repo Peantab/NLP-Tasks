@@ -67,6 +67,8 @@ def internal_refs():
         for record in aggregated:
             collection.append((year, pos, record[0], record[1], record[2]))
 
+    collection.sort(key=lambda p: p[1])
+    collection.sort(key=lambda p: p[0])
     csv_task_two(collection)
 
 
@@ -128,6 +130,7 @@ def ignore_quotations_and_names(text):
 
 
 def skip_changelogs(text):
+    """ Skip articles announcing changes introduced in other bill """
     split = regex.split(r"(?=\bArt\.).", text)
     split = list(filter(lambda article: regex.search(r"wprowadza\s+się\s+następujące\s+zmiany:", article, flags=regex.MULTILINE) is None, split))
     result = "A".join(split)
