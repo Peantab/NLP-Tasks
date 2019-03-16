@@ -6,6 +6,7 @@ DIRECTORY = 'ustawy'
 
 
 def external_refs():
+    """ Task 1 """
     collection = []
     waiting_for_dz_u = True
     for file in generate_paths():
@@ -39,7 +40,35 @@ def external_refs():
     csv_task_one(aggregated)
 
 
+def internal_refs():
+    """ Task 2 """
+    collection = []
+    for file in ["ustawy/2004_2784.txt"]:
+        collection_in_file = []
+        (year, pos) = year_and_position(file)
+        content = file_content(file)
+        article = 0
+        for token in regex.findall(r'((?<=art\.\s*)\d+)|((?<=ust\.\s*)\d+)', content, regex.MULTILINE + regex.IGNORECASE):
+            (art_token, paragraph_token) = token
+            if art_token != '':
+                article = int(art_token)
+            else:
+                paragraph = int(paragraph_token)
+                collection_in_file.append((article, paragraph))
+
+        collection_in_file.sort(key=lambda p: p[1])
+        collection_in_file.sort(key=lambda p: p[0])
+        aggregated = count_duplicates(collection_in_file)
+        aggregated.sort(key=lambda p: p[2], reverse=True)
+
+        for record in aggregated:
+            collection.append((year, pos, record[0], record[1], record[2]))
+
+    csv_task_two(collection)
+
+
 def ustawa_counter():
+    """ Task 3 """
     counter = 0
     for file in generate_paths():
         law = file_content(file)
@@ -87,5 +116,24 @@ def csv_task_one(collection):
         print("{},{},{},{}".format(record[0], record[1], record[2], record[3]))
 
 
+def count_duplicates(collection):
+    output = []
+    counter = 0
+    last_entry = collection[0]
+    for entry in collection:
+        if entry != last_entry:
+            output.append((last_entry[0], last_entry[1], counter))
+            counter = 0
+        last_entry = entry
+        counter += 1
+    return output
+
+
+def csv_task_two(collection):
+    print('"Rok","Pozycja","Artykuł","Ustęp","Liczba referencji"')
+    for record in collection:
+        print("{},{},{},{},{}".format(record[0], record[1], record[2], record[3], record[4]))
+
+
 if __name__ == '__main__':
-    external_refs()
+    internal_refs()
