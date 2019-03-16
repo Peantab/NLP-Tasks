@@ -1,4 +1,5 @@
 import os
+import sys
 import regex
 
 
@@ -136,4 +137,13 @@ def csv_task_two(collection):
 
 
 if __name__ == '__main__':
-    internal_refs()
+    if (len(sys.argv) >= 2):
+        arg = int(sys.argv[1])
+        if arg == 1:
+            external_refs()
+        elif arg == 2:
+            internal_refs()
+        elif arg == 3:
+            ustawa_counter()
+    else:
+        internal_refs()
