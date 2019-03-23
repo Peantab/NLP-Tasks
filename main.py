@@ -23,10 +23,10 @@ def prepare_index():
                         "type": "custom",
                         "tokenizer": "standard",
                         "filter": [
+                            "asciifolding",
+                            "lowercase",
                             "synonym",
                             "morfologik_stem",
-                            "lowercase"
-                            # "asciifolding"
                         ]
                     }
                 }
@@ -92,19 +92,89 @@ def year_and_position(path):
 
 
 def ustawa_counter():
+    """ Determine the number of legislative acts containing the word ustawa (in any form). """
     query = {
         "query": {
             "bool": {
                 "must": [
                     {"match": {"bill": "ustawa"}},
-                ],
-                # "filter": [
-                #   { "range": { "publish_date": { "gte": "2015-01-01" }}}
-                # ]
+                ]
             }
         }
     }
     print(es.search(index="law", doc_type="_doc", body=query))
+
+
+def kodeks_postepowania_cywilnego():
+    """ Determine the number of legislative acts containing the words kodeks postępowania cywilnego in the specified
+     order, but in an any inflection form. """
+    query = {
+        "query": {
+            "match_phrase":
+                {"bill": {"query": "kodeks postępowania cywilnego"}},
+                          # "fuzzy_transpositions": False}}
+        },
+        "highlight": {
+            "fields": {
+                "bill": {}
+            }
+        }
+    }
+    alamakota = es.search(index="law", doc_type="_doc", body=query, _source=False, request_timeout=100, size=2000)
+    print(alamakota['hits']['total'])
+    for entry in alamakota['hits']['hits']:
+        print(entry['highlight']['bill'])
+
+
+def whodzi_w_zycie():
+    """ Determine the number of legislative acts containing the words wchodzi w życie (in any form)
+    allowing for up to 2 additional words in the searched phrase. """
+    # TODO: part with 2 additional words not yet implemented
+    query = {
+        "query": {
+            "bool": {
+                "must": [
+                    {"match": {"bill": "wchodzi w życie"}},
+                ],
+            }
+        },
+        "highlight": {
+            "fields": {
+                "bill": {}
+            }
+        }
+    }
+    alamakota = es.search(index="law", doc_type="_doc", body=query, size=10)
+    print(alamakota['hits']['total'])
+    for entry in alamakota['hits']['hits']:
+        print(entry['highlight']['bill'])
+
+
+def konstytucja():
+    """
+    * Determine the 10 documents that are the most relevant for the phrase konstytucja.
+    * Print the excerpts containing the word konstytucja (up to three excerpts per document) from the previous task.
+    """
+    # TODO: theese are 10 relevant documents, not necessarily *most relevant*.
+    query = {
+        "query": {
+            "bool": {
+                "must": [
+                    {"match": {"bill": "konstytucja"}},
+                ]
+            }
+        },
+        "highlight": {
+            "fields": {
+                "bill": {}
+            },
+            "number_of_fragments": 3
+        }
+    }
+    alamakota = es.search(index="law", doc_type="_doc", body=query, size=10)
+    print(alamakota['hits']['total'])
+    for entry in alamakota['hits']['hits']:
+        print(entry['_id'], entry['highlight']['bill'])
 
 
 if __name__ == '__main__':
@@ -113,4 +183,4 @@ if __name__ == '__main__':
     elif len(sys.argv) > 1 and sys.argv[1] == 'init':
         init()
     else:
-        ustawa_counter()
+        konstytucja()

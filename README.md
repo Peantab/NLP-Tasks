@@ -7,7 +7,9 @@ Task for Natural Language Processing course, focusing on the use of ElasticSearc
 Task results - TBD
 
 ## Running
-TBD
+ * Run ElasticSearch,
+ * If you haven't done it before, run `python main.py init` to load data to an index,
+ * Run `python main.py`
 
 ## Requirements
 I assume input files in subdirectory `ustawy`.
