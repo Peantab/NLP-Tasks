@@ -111,42 +111,28 @@ def kodeks_postepowania_cywilnego():
         "query": {
             "match_phrase": {
                 "bill": "kodeks postępowania cywilnego"
-            },
-        },
-        "highlight": {
-            "fields": {
-                "bill": {}
             }
         }
     }
     result = es.search(index="law", doc_type="_doc", body=query, _source=False, request_timeout=100, size=2000)
     print(result['hits']['total'])
-    for entry in result['hits']['hits']:
-        print(entry['highlight']['bill'])
 
 
 def wchodzi_w_zycie():
     """ Determine the number of legislative acts containing the words wchodzi w życie (in any form)
     allowing for up to 2 additional words in the searched phrase. """
-    # TODO: part with 2 additional words not yet implemented
     query = {
         "query": {
-            "bool": {
-                "must": [
-                    {"match_phrase": {"bill": "wchodzi w życie"}},
-                ],
-            }
-        },
-        "highlight": {
-            "fields": {
-                "bill": {}
+            "match_phrase": {
+                "bill": {
+                    "query": "wchodzi w życie",
+                    "slop": 2
+                }
             }
         }
     }
     result = es.search(index="law", doc_type="_doc", body=query, size=10)
     print(result['hits']['total'])
-    for entry in result['hits']['hits']:
-        print(entry['highlight']['bill'])
 
 
 def konstytucja():
