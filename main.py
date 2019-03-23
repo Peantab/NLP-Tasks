@@ -142,10 +142,8 @@ def konstytucja():
     """
     query = {
         "query": {
-            "bool": {
-                "must": [
-                    {"match": {"bill": "konstytucja"}},
-                ]
+            "match": {
+                "bill": "konstytucja"
             }
         },
         "highlight": {
@@ -180,9 +178,9 @@ if __name__ == '__main__':
         kodeks_postepowania_cywilnego()
         print()
         print('Number of legislative acts containing the words "wchodzi w życie" (in any form) allowing '
-              'for up to 2 additional words in the searched phrase')
+              'for up to 2 additional words in the searched phrase:')
         wchodzi_w_zycie()
         print()
         print('Ten documents that are the most relevant for the phrase "konstytucja" with up to three excerpts '
-              'containing this word')
+              'containing this word:')
         konstytucja()

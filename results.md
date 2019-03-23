@@ -7,10 +7,10 @@ Number of legislative acts containing the word "ustawa" in any form:
 Number of legislative acts containing the words "kodeks postępowania cywilnego" in the specified order, but in an any inflection form:
 100
 
-Number of legislative acts containing the words "wchodzi w życie" (in any form) allowing for up to 2 additional words in the searched phrase
+Number of legislative acts containing the words "wchodzi w życie" (in any form) allowing for up to 2 additional words in the searched phrase:
 1175
 
-Ten documents that are the most relevant for the phrase "konstytucja" with up to three excerpts containing this word
+Ten documents that are the most relevant for the phrase "konstytucja" with up to three excerpts containing this word:
 rok: 97, poz:  629 ['o zmianie ustawy konstytucyjnej o trybie przygotowania\n           i uchwalenia <em>Konstytucji</em> Rzeczypospolitej', 'W ustawie  konstytucyjnej z  dnia 23 kwietnia 1992 r. o trybie przygotowania i \nuchwalenia <em>Konstytucji</em>', 'Do zgłoszenia projektu <em>Konstytucji</em> załącza się wykaz \n                obywateli popierających zgłoszenie']
 rok: 00, poz:  443 ['umowy międzynarodowej i nie wypełnia przesłanek określonych w art. 89\n     ust. 1 lub art. 90 <em>Konstytucji</em>', 'międzynarodowej lub załącznika nie\n     wypełnia przesłanek określonych w art. 89 ust. 1 lub art. 90 <em>Konstytucji</em>', 'co do zasadności wyboru\n  trybu ratyfikacji umowy międzynarodowej, o którym mowa w art. 89 ust. 2\n  <em>Konstytucji</em>']
 rok: 97, poz:  604 ['Jeżeli Trybunał Konstytucyjny wyda orzeczenie o sprzeczności celów partii \n   politycznej z <em>Konstytucją</em>', 'Jeżeli Trybunał Konstytucyjny wyda orzeczenie o sprzeczności z <em>Konstytucją</em>\n   celów lub działalności', 'Ciężar udowodnienia niezgodności z <em>Konstytucją</em> spoczywa\n                na wnioskodawcy, który w tym']
