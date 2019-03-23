@@ -4,12 +4,18 @@ Task for Natural Language Processing course, focusing on the use of ElasticSearc
 
 [Task description](./2-fts.md).
 
-Task results - TBD
+[Task results](./results.md)
 
 ## Running
  * Run ElasticSearch,
- * If you haven't done it before, run `python main.py init` to load data to an index,
- * Run `python main.py`
+ * Run `runall.sh`
+ 
+ OR:
+ 
+ * Run ElasticSearch,
+ * Run `python main.py init` to load data to an index,
+ * Run `python main.py`,
+ * Run `python main.py stop` to remove index from ElasticSearch.
 
 ## Requirements
 I assume input files in subdirectory `ustawy`.

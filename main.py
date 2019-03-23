@@ -172,4 +172,17 @@ if __name__ == '__main__':
     elif len(sys.argv) > 1 and sys.argv[1] == 'init':
         init()
     else:
+        print('Number of legislative acts containing the word "ustawa" in any form:')
+        ustawa_counter()
+        print()
+        print('Number of legislative acts containing the words "kodeks postępowania cywilnego" in the specified order, '
+              'but in an any inflection form:')
+        kodeks_postepowania_cywilnego()
+        print()
+        print('Number of legislative acts containing the words "wchodzi w życie" (in any form) allowing '
+              'for up to 2 additional words in the searched phrase')
+        wchodzi_w_zycie()
+        print()
+        print('Ten documents that are the most relevant for the phrase "konstytucja" with up to three excerpts '
+              'containing this word')
         konstytucja()
