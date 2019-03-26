@@ -22,9 +22,9 @@ def prepare_index():
                         "type": "custom",
                         "tokenizer": "standard",
                         "filter": [
+                            "synonym",
                             "morfologik_stem",
                             "lowercase",
-                            "synonym"
                         ]
                     }
                 }
@@ -66,12 +66,14 @@ def remove_index():
 
 
 def load_data():
+    operations = []
     for file in generate_paths():
         bill = file_content(file)
         (year, pos) = year_and_position(file)
         bill_id = (year % 100) * 10000 + pos
-        json = {"bill": bill}
-        es.create(index="law", doc_type="_doc", id=bill_id, body=json)
+        operations.append({"create": {"_id": bill_id}})
+        operations.append({"bill": bill})
+    es.bulk(index="law", doc_type="_doc", body=operations, request_timeout=60)
 
 
 def generate_paths():
