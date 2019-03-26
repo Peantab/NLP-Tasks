@@ -2,7 +2,7 @@
 
 Task for Natural Language Processing course, focusing on the use of ElasticSearch.
 
-[Task description](./2-fts.md).
+[Task description](./2-fts.md)
 
 [Task results](./results.md)
 
@@ -18,7 +18,7 @@ Task for Natural Language Processing course, focusing on the use of ElasticSearc
  * Run `python main.py stop` to remove index from ElasticSearch.
 
 ## Requirements
-I assume input files in subdirectory `ustawy`.
+I assume input files in a subdirectory `ustawy`.
 Required Python libraries are listed in `requirements.txt`.
 Required ES plugin:
 `pl.allegro.tech.elasticsearch.plugin:elasticsearch-analysis-morfologik:6.6.2` 

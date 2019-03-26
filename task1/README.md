@@ -2,7 +2,7 @@
 
 Task for Natural Language Processing course, focusing on the use of regular expressions.
 
-[Task description](./1-regexp.md).
+[Task description](./1-regexp.md)
 
 [Task results](./results.md)
 
@@ -12,7 +12,7 @@ or run `runall.sh` which will generate separate files with solutions for each ta
 Both scripts need to be invoked from within a containing directory.
 
 ## Requirements
-I assume input files in subdirectory `ustawy`.
+I assume input files in a subdirectory `ustawy`.
 
 Tested with:
 * Python 3.6.7
