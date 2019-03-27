@@ -17,7 +17,7 @@ ${PYTHON_INTERPRETER} main.py stop
 echo "Creating markdown..."
 {
 echo -e "# Results\n\n"
-echo -e "A plot in a logarithmic scale, where X-axis contains the rank of a term and Y-axis contains the number of occurrences of the term with given rank.\n![Plot in a logarithmic scale](plot.png)"
+echo -e "A plot in a logarithmic scale, where X-axis contains the rank of a term and Y-axis contains the number of occurrences of the term with given rank.\n\n![Plot in a logarithmic scale](plot.png)"
 echo -e "\n\`\`\`"
 cat results.txt
 echo -e "\`\`\`"

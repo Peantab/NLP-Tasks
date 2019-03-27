@@ -2,6 +2,7 @@
 
 
 A plot in a logarithmic scale, where X-axis contains the rank of a term and Y-axis contains the number of occurrences of the term with given rank.
+
 ![Plot in a logarithmic scale](plot.png)
 
 ```
