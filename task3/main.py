@@ -211,6 +211,17 @@ def levenshtein(dictionary, frequency_list, invalid_words):
     return corrected_words
 
 
+def print_results(top, three, corrected_words):
+    print("30 words with the highest ranks that do not belong to the dictionary:")
+    print(", ".join(top))
+    print()
+    print("30 words with 3 occurrences that do not belong to the dictionary:")
+    print(", ".join(three))
+    print()
+    print("The most probable correction of the words from the previous list:")
+    print(", ".join(corrected_words))
+
+
 def main():
     all_frequency_lists = generate_frequency_lists()
     aggregated = aggregate_frequency_lists(all_frequency_lists)
@@ -221,6 +232,7 @@ def main():
     top = thirty_top_words(unknown)
     three = three_occurrences(unknown)
     corrected_words = levenshtein(dictionary, filtered, three)
+    print_results(top, three, corrected_words)
 
 
 if __name__ == '__main__':
