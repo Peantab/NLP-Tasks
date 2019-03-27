@@ -2,6 +2,7 @@ import os
 import sys
 import regex
 from elasticsearch import Elasticsearch
+import matplotlib.pyplot as plt
 
 DIRECTORY = '../ustawy'
 
@@ -142,6 +143,23 @@ def filter_frequency_list(frequency_list):
     return filtered_frequency_list
 
 
+def generate_plot(frequency_list):
+    """
+    Make a plot in a logarithmic scale:
+    * X-axis should contain the rank of a term, meaning the first rank belongs to the term with the highest number
+      of occurrences; the terms with the same number of occurrences should be ordered by their name,
+    * Y-axis should contain the number of occurrences of the term with given rank.
+    """
+    frequency_list.sort(key=lambda e: e[0])  # alphabetically
+    frequency_list.sort(key=lambda e:e[1], reverse=True)  # by number of occurrences
+    x = range(len(frequency_list))
+    y = [entry[1] for entry in frequency_list]
+    plt.semilogy(x, y)
+    plt.title('Terms Frequency')
+    plt.grid(True)
+    plt.savefig("plot.png")
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'stop':
         remove_index()
@@ -151,3 +169,4 @@ if __name__ == '__main__':
         all_frequency_lists = generate_frequency_lists()
         aggregated = aggregate_frequency_lists(all_frequency_lists)
         filtered = filter_frequency_list(aggregated)
+        generate_plot(filtered)
