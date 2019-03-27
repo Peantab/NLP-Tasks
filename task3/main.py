@@ -3,6 +3,7 @@ import sys
 import regex
 from elasticsearch import Elasticsearch
 import matplotlib.pyplot as plt
+import Levenshtein
 
 DIRECTORY = '../ustawy'
 DICTIONARY = '../polimorfologik-2.1.txt'
@@ -167,7 +168,7 @@ def unknown_words(frequency_list, dictionary):
     for entry in frequency_list:
         key = entry[0]
         if key not in dictionary:
-            unknown.append(entry)  # TODO: preprocess it?
+            unknown.append(entry)
     return unknown
 
 
@@ -175,7 +176,7 @@ def load_dictionary():
     result_dictionary = set()
     with open(DICTIONARY, "r") as dictionary_file:
         for line in dictionary_file.readlines():
-            result_dictionary.add(line.split(sep=";", maxsplit=1)[0])
+            result_dictionary.add(line.split(sep=";", maxsplit=1)[0].lower())
     return result_dictionary
 
 
@@ -189,6 +190,27 @@ def three_occurrences(unknown):
     return [term[0] for term in unknown if term[1] == 3][0:30]
 
 
+def levenshtein(dictionary, frequency_list, invalid_words):
+    """ Use Levenshtein distance and the frequency list, to determine the most probable correction of the words
+    from the second list. """
+    corrected_words = []
+    for word in invalid_words:
+        min_distance = 999
+        min_distance_term = ""
+        for (term, _) in frequency_list:
+            if term not in dictionary:
+                continue
+            distance = Levenshtein.distance(word, term)
+            if distance == 1:
+                min_distance_term = term
+                break
+            elif distance < min_distance:
+                min_distance = distance
+                min_distance_term = term
+        corrected_words.append(min_distance_term)
+    return corrected_words
+
+
 def main():
     all_frequency_lists = generate_frequency_lists()
     aggregated = aggregate_frequency_lists(all_frequency_lists)
@@ -198,6 +220,7 @@ def main():
     unknown = unknown_words(filtered, dictionary)
     top = thirty_top_words(unknown)
     three = three_occurrences(unknown)
+    corrected_words = levenshtein(dictionary, filtered, three)
 
 
 if __name__ == '__main__':

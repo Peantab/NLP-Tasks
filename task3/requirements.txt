@@ -1,3 +1,4 @@
 elasticsearch>=6.0.0,<7.0.0
 regex==2019.3.12
 matplotlib==3.0.3
+python-Levenshtein==0.12.0
