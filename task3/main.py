@@ -5,6 +5,7 @@ from elasticsearch import Elasticsearch
 import matplotlib.pyplot as plt
 
 DIRECTORY = '../ustawy'
+DICTIONARY = '../polimorfologik-2.1.txt'
 
 es = Elasticsearch()  # By default we connect to localhost:9200
 
@@ -151,7 +152,7 @@ def generate_plot(frequency_list):
     * Y-axis should contain the number of occurrences of the term with given rank.
     """
     frequency_list.sort(key=lambda e: e[0])  # alphabetically
-    frequency_list.sort(key=lambda e:e[1], reverse=True)  # by number of occurrences
+    frequency_list.sort(key=lambda e: e[1], reverse=True)  # by number of occurrences
     x = range(len(frequency_list))
     y = [entry[1] for entry in frequency_list]
     plt.semilogy(x, y)
@@ -160,13 +161,49 @@ def generate_plot(frequency_list):
     plt.savefig("plot.png")
 
 
+def unknown_words(frequency_list, dictionary):
+    """ Download polimorfologik.zip dictionary and use it to find all words that do not appear in that dictionary. """
+    unknown = []
+    for entry in frequency_list:
+        key = entry[0]
+        if key not in dictionary:
+            unknown.append(entry)  # TODO: preprocess it?
+    return unknown
+
+
+def load_dictionary():
+    result_dictionary = set()
+    with open(DICTIONARY, "r") as dictionary_file:
+        for line in dictionary_file.readlines():
+            result_dictionary.add(line.split(sep=";", maxsplit=1)[0])
+    return result_dictionary
+
+
+def thirty_top_words(unknown):
+    """ Find 30 words with the highest ranks that do not belong to the dictionary. """
+    return [term[0] for term in unknown[0:30]]  # they are sorted already
+
+
+def three_occurrences(unknown):
+    """ Find 30 words with 3 occurrences that do not belong to the dictionary. """
+    return [term[0] for term in unknown if term[1] == 3][0:30]
+
+
+def main():
+    all_frequency_lists = generate_frequency_lists()
+    aggregated = aggregate_frequency_lists(all_frequency_lists)
+    filtered = filter_frequency_list(aggregated)
+    generate_plot(filtered)
+    dictionary = load_dictionary()
+    unknown = unknown_words(filtered, dictionary)
+    top = thirty_top_words(unknown)
+    three = three_occurrences(unknown)
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'stop':
         remove_index()
     elif len(sys.argv) > 1 and sys.argv[1] == 'init':
         init()
     else:
-        all_frequency_lists = generate_frequency_lists()
-        aggregated = aggregate_frequency_lists(all_frequency_lists)
-        filtered = filter_frequency_list(aggregated)
-        generate_plot(filtered)
+        main()
