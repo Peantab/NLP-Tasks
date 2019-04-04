@@ -11,6 +11,9 @@ def main():
     probability_calculator = ProbabilityCalculator(bigrams)
     pmi_results = pointwise_mutual_information(bigrams, probability_calculator)
     display_top_thirty("Top 30 results for Pointwise Mutual Information:", pmi_results)
+    llr_results = log_likelihood_ratio(bigrams, probability_calculator)
+    print()
+    display_top_thirty("Top 30 results for Log-Likelihood Ratio:", llr_results)
 
 
 def load_corpora():
@@ -43,10 +46,22 @@ def count_bigrams(corpora):
 def pointwise_mutual_information(bigrams, probability_calculator):
     """ Use pointwise mutual information to compute the measure for all pairs of words. """
     bigrams_with_pmi = []
-    for (x, y) in bigrams:
+    for (x, y) in bigrams.keys():
         no_log = probability_calculator.both(x, y) / (probability_calculator.left(x) * probability_calculator.right(y))
         bigrams_with_pmi.append(((x, y), math.log2(no_log)))
     return sorted(bigrams_with_pmi, key=(lambda e: e[1]), reverse=True)
+
+
+def log_likelihood_ratio(bigrams, probability_calculator):
+    """ Use log likelihood ratio (LLR) to compute the measure for all pairs of words. """
+    bigrams_with_llr = []
+    for (x, y) in bigrams.keys():
+        value = llr_2x2(probability_calculator.both(x, y),
+                        probability_calculator.right_no_left(x, y),
+                        probability_calculator.left_no_right(x, y),
+                        probability_calculator.no_left_no_right(x, y))
+        bigrams_with_llr.append(((x, y), value))
+    return sorted(bigrams_with_llr, key=(lambda e: e[1]), reverse=True)
 
 
 def display_top_thirty(description, data):
@@ -76,7 +91,22 @@ class ProbabilityCalculator:
         nominator = self.occurrences[word][1]
         return nominator/self.denominator
 
+    def left_no_right(self, word_left, word_right):
+        nominator = self.occurrences[word_left][0] - self.bigrams[(word_left, word_right)]
+        return nominator/self.denominator
+
+    def right_no_left(self, word_left, word_right):
+        nominator = self.occurrences[word_right][1] - self.bigrams[(word_left, word_right)]
+        return nominator/self.denominator
+
+    def no_left_no_right(self, word_left, word_right):
+        nominator = self.denominator - self.occurrences[word_left][0] - self.occurrences[word_right][1]
+        if (word_left, word_right) in self.bigrams.keys():
+            nominator += self.bigrams[(word_left, word_right)]
+        return nominator / self.denominator
+
     def any(self, word):
+        # not used but kept here for making possible not distinguishing between "left" and "right" word.
         nominator = self.occurrences[word][0] + self.occurrences[word][1]
         if (word, word) in self.bigrams.keys():
             nominator -= self.bigrams[(word, word)]
@@ -95,6 +125,23 @@ def generate_paths():
 def file_content(path):
     with open(path, 'r') as inp:
         return ''.join(inp.readlines())
+
+
+# The two functions below come from python-llr library by Ted Dunning (https://github.com/tdunning/python-llr)
+def llr_2x2(k11, k12, k21, k22):
+    """ Special case of llr with a 2x2 table """
+    return 2 * (denormEntropy([k11+k12, k21+k22]) +
+                denormEntropy([k11+k21, k12+k22]) -
+                denormEntropy([k11, k12, k21, k22]))
+
+
+def denormEntropy(counts):
+    """ Computes the entropy of a list of counts scaled by the sum of the counts.
+    If the inputs sum to one, this is just the normal definition of entropy """
+    counts = list(counts)
+    total = float(sum(counts))
+    # Note tricky way to avoid 0*log(0)
+    return -sum([k * math.log(k/total + (k == 0)) for k in counts])
 
 
 if __name__ == '__main__':
