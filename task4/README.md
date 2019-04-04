@@ -4,7 +4,7 @@ Task for Natural Language Processing course, focusing on bigrams.
 
 [Task description](./4-multiword.md)
 
-[Task results](./results)
+[Task results](./results.md)
 
 ## Running
 * Run `runall.sh`. Results will be generated as `results.md`...
