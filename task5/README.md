@@ -7,7 +7,10 @@ Task for Natural Language Processing course, focusing on morphosyntactic tagging
 Task results - TBD
 
 ## Running
-TBD
+* Download Docker image:
+  `sudo docker pull djstrong/krnnt2`
+* Run Docker container:
+  `sudo docker run -it -p 9200:9200 djstrong/krnnt2 python3 /home/krnnt/krnnt/krnnt_serve.py /home/krnnt/krnnt/data`
 
 ## Requirements
-TBD
+Docker (tested with 18.09.2)
