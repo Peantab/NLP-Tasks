@@ -14,15 +14,18 @@ def load_corpora():
     file_name = "corpora.pickle"
     corpora = []
     if os.path.isfile(file_name):
+        print("Loading corpora from file (running Docker is not needed)...", end="")
         with open(file_name, "rb") as f:
             corpora = pickle.load(f)
     else:
+        print("Generating corpora...", end="")
         for file in generate_paths():
             bill = file_content(file)
             tagged_bill = remove_unneeded(tag(bill))
             corpora.append(tagged_bill)
         with open(file_name, "wb") as f:
             pickle.dump(corpora, f)
+    print("OK")
     return corpora
 
 
