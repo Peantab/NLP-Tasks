@@ -27,3 +27,6 @@
 
         Drawn in *LibreOffice Draw*, based on result of exploration in *WordNetLoom-Viewer*
         ![Directed graph of semantic relations in group 1](dag1.png)
+    2. wypadek<sub>1</sub>, wypadek komunikacyjny<sub>1</sub>, kolizja<sub>2</sub>, zderzenie<sub>2</sub>, kolizja drogowa<sub>1</sub>, bezkolizyjny<sub>2</sub>, katastrofa budowlana<sub>1</sub>, wypadek drogowy<sub>1</sub>.
+
+        ![Directed graph of semantic relations in group 2](dag2.png)
