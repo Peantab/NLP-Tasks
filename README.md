@@ -7,6 +7,7 @@ Tasks for *Natural Language Processing* course.
 * [Task 3: Levenshtein distance](./task3/README.md)
 * [Task 4: Multiword expressions](./task4/README.md)
 * [Task 5: Morphosyntactic tagging](./task5/README.md)
+* [Task 6: Wordnet](./task6/README.md)
 
 ## Running and requirements
 
