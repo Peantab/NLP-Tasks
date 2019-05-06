@@ -37,7 +37,7 @@ def most_similar(wv):
     for word in ['sąd::noun', 'trybunał::noun', 'kodeks_cywilny::noun', 'kpk::noun', 'szkoda::noun', 'wypadek::noun',
                  'kolizja::noun', 'szkoda_majątkowa::noun', 'nieszczęście::noun', 'rozwód::noun']:
         # co z sąd wysoki, trybunał konstytucyjny, sąd rejonowy? - dałem zwykły sąd, trybunał
-        result = wv.most_similar(positive=word, topn=20)
+        result = wv.most_similar(positive=word, topn=10)
         print(crop_pos(word) + ":")
         for entry in result:
             (literal, pos) = extract_name_and_pos(entry[0])
@@ -50,9 +50,10 @@ def equations(wv):
                    # sądu wysokiego nie ma
                    wv.word_vec('pasażer::noun') - wv.word_vec('mężczyzna::noun') + wv.word_vec('kobieta::noun'),
                    wv.word_vec('samochód::noun') - wv.word_vec('droga::noun') + wv.word_vec('rzeka::noun')]:
-        result = wv.similar_by_vector(vector, topn=1)[0]
-        (literal, pos) = extract_name_and_pos(result[0])
-        print('- {}: {}'.format(literal, pos))
+        results = wv.similar_by_vector(vector, topn=5)
+        for result in results:
+            (literal, pos) = extract_name_and_pos(result[0])
+            print('- {}: {}'.format(literal, pos))
 
 
 def t_sne(wv):
