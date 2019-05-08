@@ -1,6 +1,7 @@
 import os
 import errno
 import re
+import random
 
 DIRECTORY = '../ustawy'
 
@@ -10,8 +11,8 @@ AMENDING_BILLS_DIR = './amending/'
 
 def main():
     confirm_dirs()
-    for name, file in generate_names_and_paths():
-        bill = file_content(file)
+    for name, path in generate_names_and_paths(DIRECTORY):
+        bill = file_content(os.path.join(path, name))
 
         # Recognize a type
         found_patterns = re.search(r'^\W*(?:zmieniająca\W+ustawę\W+)?o\W+zmianie(?:\W+niektórych)?\W+ustaw',
@@ -28,12 +29,13 @@ def main():
         # Save to a file
         with open(new_localisation, "w+") as new_copy:
             new_copy.write(bill)
+    split_into_groups()
     print('OK')
 
 
-def generate_names_and_paths():
-    (_, _, filenames) = next(os.walk(DIRECTORY))
-    return zip(filenames, map(lambda name: os.path.join(DIRECTORY, name), filenames))
+def generate_names_and_paths(directory):
+    (_, _, filenames) = next(os.walk(directory))
+    return [(name, directory) for name in filenames]
 
 
 def file_content(path):
@@ -48,6 +50,21 @@ def confirm_dirs():
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
+
+
+def split_into_groups():
+    for directory in [INITIAL_BILLS_DIR, AMENDING_BILLS_DIR]:
+        files = generate_names_and_paths(directory)
+        files_count = len(files)
+        sixty_percent = int(0.6 * files_count)
+        twenty_percent = int(0.2 * files_count)
+        random.shuffle(files)
+        training = files[:sixty_percent]
+        validation = files[sixty_percent:sixty_percent + twenty_percent]
+        testing = files[sixty_percent + twenty_percent:]
+        for pack, prefix in [(training, 'tra_'), (validation, 'val_'), (testing, 'tes_')]:
+            for name, path in pack:
+                os.rename(os.path.join(path, name), os.path.join(path, prefix + name))
 
 
 if __name__ == '__main__':
