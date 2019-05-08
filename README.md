@@ -9,6 +9,7 @@ Tasks for *Natural Language Processing* course.
 * [Task 5: Morphosyntactic tagging](./task5/README.md)
 * [Task 6: Wordnet](./task6/README.md)
 * [Task 7: Word embeddings](./task7/README.md)
+* [Task 8: Text classification](./task8/README.md)
 
 ## Running and requirements
 
