@@ -5,7 +5,13 @@
 polimorfologik-2.1.txt
 **/skipgram/*
 **/initial/*
+**/initial_ten_percent/*
+**/initial_ten_lines/*
+**/initial_one_line/*
 **/amending/*
+**/amending_ten_percent/*
+**/amending_ten_lines/*
+**/amending_one_line/*
 
 task1.csv
 task2.csv
