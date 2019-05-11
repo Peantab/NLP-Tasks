@@ -17,6 +17,7 @@ def main():
     copy_and_recognize()
     split_into_groups()
     generate_shortened_versions()
+    fasttextise()
     print('OK')
 
 
@@ -41,7 +42,7 @@ def copy_and_recognize():
         bill = re.sub(r'\n\Z', '', bill, 0, re.MULTILINE)
 
         # Save to a file
-        with open(new_localisation, "w+") as new_copy:
+        with open(new_localisation, 'w+') as new_copy:
             new_copy.write(bill)
 
 
@@ -92,6 +93,33 @@ def generate_shortened_versions():
                 to_save = random.sample(lines, amount_to_take)
                 with open(os.path.join(directory + suffix, name), 'w+') as output:
                     output.write('\n'.join(to_save))
+
+
+def fasttextise():
+    """ Generate files in FastText format """
+    for classification, class_dir in [('initial', INITIAL_BILLS_DIR), ('amending', AMENDING_BILLS_DIR)]:
+        label = '__label__' + classification
+        for subdir in ['', TEN_PERCENT_SUFFIX, TEN_LINES_SUFFIX, ONE_LINE_SUFFIX]:
+            path = class_dir + subdir
+            entries_tra = []
+            entries_tes = []
+            entries_val = []
+            for name, path_2 in generate_names_and_paths(path):
+                bill = file_content(os.path.join(path_2, name))
+                bill = re.sub(r'\n', ' ', bill)  # substitute line breaks with spaces
+                bill = re.sub(r'  +', ' ', bill)  # at most one space in row
+                if name.startswith('tes'):
+                    entries_tes.append(label + '\t' + bill)
+                elif name.startswith('tra'):
+                    entries_tra.append(label + '\t' + bill)
+                elif name.startswith('val'):
+                    entries_val.append(label + '\t' + bill)
+            with open(os.path.join(path, 'fasttext_tra.csv'), 'w+') as fasttext:
+                fasttext.write('\n'.join(entries_tra))
+            with open(os.path.join(path, 'fasttext_tes.csv'), 'w+') as fasttext:
+                fasttext.write('\n'.join(entries_tes))
+            with open(os.path.join(path, 'fasttext_val.csv'), 'w+') as fasttext:
+                fasttext.write('\n'.join(entries_val))
 
 
 if __name__ == '__main__':
