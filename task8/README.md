@@ -10,4 +10,5 @@ Task results - TBD
 TBD
 
 ## Requirements
-TBD
+Download *fastText v0.2.0* extract here and install Python package as in `fastText-0.2.0/python/README.md`.
+Required Python libraries are listed in `requirements.txt`.

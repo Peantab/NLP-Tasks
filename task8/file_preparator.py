@@ -5,12 +5,14 @@ import random
 
 DIRECTORY = '../ustawy'
 
+DATA_DIRECTORY = './data'
+
 INITIAL_BILLS_DIR = './initial'
 AMENDING_BILLS_DIR = './amending'
 
-TEN_PERCENT_SUFFIX = '_ten_percent'
-TEN_LINES_SUFFIX = '_ten_lines'
-ONE_LINE_SUFFIX = '_one_line'
+TEN_PERCENT = 'ten_percent'
+TEN_LINES = 'ten_lines'
+ONE_LINE = 'one_line'
 
 
 def main():
@@ -18,6 +20,7 @@ def main():
     split_into_groups()
     generate_shortened_versions()
     fasttextise()
+    prepare_input()
     print('OK')
 
 
@@ -58,11 +61,15 @@ def file_content(path):
 
 def confirm_dirs(suffix=''):
     for directory in [INITIAL_BILLS_DIR, AMENDING_BILLS_DIR]:
-        try:
-            os.makedirs(directory + suffix)
-        except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
+        confirm_dir(directory + suffix)
+
+
+def confirm_dir(directory):
+    try:
+        os.makedirs(directory)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
 
 
 def split_into_groups():
@@ -81,9 +88,9 @@ def split_into_groups():
 
 
 def generate_shortened_versions():
-    for suffix, amount in [(TEN_PERCENT_SUFFIX, lambda x: int(0.1 * x)),
-                           (TEN_LINES_SUFFIX, lambda x: min(10, x)),
-                           (ONE_LINE_SUFFIX, lambda x: min(1, x))]:
+    for suffix, amount in [('_' + TEN_PERCENT, lambda x: int(0.1 * x)),
+                           ('_' + TEN_LINES, lambda x: min(10, x)),
+                           ('_' + ONE_LINE, lambda x: min(1, x))]:
         confirm_dirs(suffix)
         for directory in [INITIAL_BILLS_DIR, AMENDING_BILLS_DIR]:
             for name, path in generate_names_and_paths(directory):
@@ -99,7 +106,7 @@ def fasttextise():
     """ Generate files in FastText format """
     for classification, class_dir in [('initial', INITIAL_BILLS_DIR), ('amending', AMENDING_BILLS_DIR)]:
         label = '__label__' + classification
-        for subdir in ['', TEN_PERCENT_SUFFIX, TEN_LINES_SUFFIX, ONE_LINE_SUFFIX]:
+        for subdir in ['', '_' + TEN_PERCENT, '_' + TEN_LINES, '_' + ONE_LINE]:
             path = class_dir + subdir
             entries_tra = []
             entries_tes = []
@@ -120,6 +127,21 @@ def fasttextise():
                 fasttext.write('\n'.join(entries_tes))
             with open(os.path.join(path, 'fasttext_val.csv'), 'w+', encoding="utf8") as fasttext:
                 fasttext.write('\n'.join(entries_val))
+
+
+def prepare_input():
+    confirm_dir(DATA_DIRECTORY)
+    for variant, directory_suffix in [('full_text', ''), ('ten_percent', '_' + TEN_PERCENT),
+                                      ('ten_lines', '_' + TEN_LINES), ('one_line', '_' + ONE_LINE)]:
+        for part in ['_tra', '_val', '_tes']:
+            fasttext_list = []
+            for class_dir in [INITIAL_BILLS_DIR, AMENDING_BILLS_DIR]:
+                with open(os.path.join(class_dir + directory_suffix, 'fasttext' + part + '.csv'), encoding="utf8")\
+                        as fasttext_file:
+                    fasttext_list.extend(fasttext_file.readlines())
+            random.shuffle(fasttext_list)
+            with open(os.path.join(DATA_DIRECTORY, variant + part + '.csv'), 'w', encoding="utf8") as output:
+                output.write(''.join(fasttext_list))
 
 
 if __name__ == '__main__':
