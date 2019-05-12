@@ -40,8 +40,8 @@ e.g.: `./fasttext test-label ../fasttext_one_line.bin ../data/one_line_tes.csv 1
 
 ## Flair
 
-* full text would take ages...
-* 10 percent - work in progress...
+* full text - cancelled, because of failure with 10%
+* 10 percent - [stopped - see the log](./flair_ten_percent.log)
 * 10 lines:
     * Precision: 0.7500
     * Recall: 0.7883
