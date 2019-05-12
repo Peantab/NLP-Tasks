@@ -39,16 +39,16 @@ def main():
 
 def prepare_input():
     confirm_dir(DATA_DIRECTORY)
-    for variant, directory_suffix in [('full_text', ''), ('ten_percent', TEN_PERCENT), ('ten_lines', TEN_LINES),
-                                      ('one_line', ONE_LINE)]:
+    for variant, directory_suffix in [('full_text', ''), ('ten_percent', '_' + TEN_PERCENT),
+                                      ('ten_lines', '_' + TEN_LINES), ('one_line', '_' + ONE_LINE)]:
         for part in ['_tra', '_val', '_tes']:
             fasttext_list = []
             for class_dir in [INITIAL_BILLS_DIR, AMENDING_BILLS_DIR]:
-                with open(os.path.join(class_dir + '_' + directory_suffix, 'fasttext' + part + '.csv'))\
+                with open(os.path.join(class_dir + directory_suffix, 'fasttext' + part + '.csv'), encoding="utf8")\
                         as fasttext_file:
                     fasttext_list.extend(fasttext_file.readlines())
             random.shuffle(fasttext_list)
-            with open(os.path.join(DATA_DIRECTORY, variant + part + '.csv'), 'w') as output:
+            with open(os.path.join(DATA_DIRECTORY, variant + part + '.csv'), 'w', encoding="utf8") as output:
                 output.write(''.join(fasttext_list))
 
 

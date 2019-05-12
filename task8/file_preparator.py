@@ -42,7 +42,7 @@ def copy_and_recognize():
         bill = re.sub(r'\n\Z', '', bill, 0, re.MULTILINE)
 
         # Save to a file
-        with open(new_localisation, 'w+') as new_copy:
+        with open(new_localisation, 'w+', encoding="utf8") as new_copy:
             new_copy.write(bill)
 
 
@@ -52,7 +52,7 @@ def generate_names_and_paths(directory):
 
 
 def file_content(path):
-    with open(path, 'r') as inp:
+    with open(path, 'r', encoding="utf8") as inp:
         return ''.join(inp.readlines())
 
 
@@ -91,7 +91,7 @@ def generate_shortened_versions():
                 lines = bill.split('\n')
                 amount_to_take = amount(len(lines))
                 to_save = random.sample(lines, amount_to_take)
-                with open(os.path.join(directory + suffix, name), 'w+') as output:
+                with open(os.path.join(directory + suffix, name), 'w+', encoding="utf8") as output:
                     output.write('\n'.join(to_save))
 
 
@@ -114,11 +114,11 @@ def fasttextise():
                     entries_tra.append(label + '\t' + bill)
                 elif name.startswith('val'):
                     entries_val.append(label + '\t' + bill)
-            with open(os.path.join(path, 'fasttext_tra.csv'), 'w+') as fasttext:
+            with open(os.path.join(path, 'fasttext_tra.csv'), 'w+', encoding="utf8") as fasttext:
                 fasttext.write('\n'.join(entries_tra))
-            with open(os.path.join(path, 'fasttext_tes.csv'), 'w+') as fasttext:
+            with open(os.path.join(path, 'fasttext_tes.csv'), 'w+', encoding="utf8") as fasttext:
                 fasttext.write('\n'.join(entries_tes))
-            with open(os.path.join(path, 'fasttext_val.csv'), 'w+') as fasttext:
+            with open(os.path.join(path, 'fasttext_val.csv'), 'w+', encoding="utf8") as fasttext:
                 fasttext.write('\n'.join(entries_val))
 
 
