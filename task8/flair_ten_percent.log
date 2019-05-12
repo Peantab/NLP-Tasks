@@ -1,0 +1,23 @@
+﻿2019-05-12 07:45:20,832 Reading data from data
+2019-05-12 07:45:20,832 Train: data\ten_percent_tra.csv
+2019-05-12 07:45:20,832 Dev: data\ten_percent_val.csv
+2019-05-12 07:45:20,832 Test: data\ten_percent_tes.csv
+2019-05-12 07:45:30,795 this function is deprecated, use smart_open.open instead
+.../classification_flair.py:34: DeprecationWarning: Call to deprecated class DocumentLSTMEmbeddings. (The functionality of this class is moved to 'DocumentRNNEmbeddings') -- Deprecated since version 0.4.
+  reproject_words_dimension=256)
+2019-05-12 07:45:33,891 ----------------------------------------------------------------------------------------------------
+2019-05-12 07:45:33,891 Evaluation method: MICRO_F1_SCORE
+2019-05-12 07:45:33,896 ----------------------------------------------------------------------------------------------------
+2019-05-12 07:52:13,823 epoch 1 - iter 0/20 - loss 0.02128733
+2019-05-12 08:17:43,625 epoch 1 - iter 2/20 - loss 0.02081251
+2019-05-12 08:36:37,212 epoch 1 - iter 4/20 - loss 0.02096649
+2019-05-12 08:58:20,328 epoch 1 - iter 6/20 - loss 0.02054969
+2019-05-12 09:18:18,406 epoch 1 - iter 8/20 - loss 0.02079406
+2019-05-12 10:08:41,798 epoch 1 - iter 10/20 - loss 0.02077430
+2019-05-12 11:23:25,830 epoch 1 - iter 12/20 - loss 0.02086880
+2019-05-12 11:59:57,612 epoch 1 - iter 14/20 - loss 0.02069705
+2019-05-12 12:37:09,696 epoch 1 - iter 16/20 - loss 0.02070939
+2019-05-12 13:16:31,781 epoch 1 - iter 18/20 - loss 0.02064620
+2019-05-12 13:22:24,048 ----------------------------------------------------------------------------------------------------
+2019-05-12 13:22:24,049 EPOCH 1 done: loss 0.0211 - lr 0.1000 - bad epochs 0
+// Switched off after 15:00
