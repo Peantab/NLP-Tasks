@@ -1,1 +1,2 @@
+scikit-learn
 flair==0.4.1

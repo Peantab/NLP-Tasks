@@ -88,7 +88,7 @@ def split_into_groups():
 
 
 def generate_shortened_versions():
-    for suffix, amount in [('_' + TEN_PERCENT, lambda x: int(0.1 * x)),
+    for suffix, amount in [('_' + TEN_PERCENT, lambda x: max(int(0.1 * x), 1)),
                            ('_' + TEN_LINES, lambda x: min(10, x)),
                            ('_' + ONE_LINE, lambda x: min(1, x))]:
         confirm_dirs(suffix)
