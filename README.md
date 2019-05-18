@@ -10,6 +10,7 @@ Tasks for *Natural Language Processing* course.
 * [Task 6: Wordnet](./task6/README.md)
 * [Task 7: Word embeddings](./task7/README.md)
 * [Task 8: Text classification](./task8/README.md)
+* [Task 9: Named Entity Recognition](./task9/README.md)
 
 ## Running and requirements
 
